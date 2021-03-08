@@ -31,7 +31,10 @@ const promptUser = () => {
         ]);
 };
 
-const promptProject = () => {
+const promptProject = (portfolioData) => {
+    if (!portfolioData.projects) {
+        portfolioData.projects = [];
+    }
     console.log(`
     ===================================
     Add a New Project to Your Portfolio
@@ -62,10 +65,21 @@ const promptProject = () => {
         },
         {
             type: 'confirm',
-            name: 'comfirmAddProject',
+            name: 'confirmAddProject',
             message: 'Would you like to add another project?',
             default: false
         }
-    ]);
+    ])
+        .then(projectData => {
+            portfolioData.projects.push(projectData);
+            if (projectData.confirmAddProject) {
+                return promptProject(portfolioData)
+            } else {
+                return portfolioData;
+            }
+
+        })
 };
-promptUser().then(answers => console.log(answers));
+promptUser()
+    .then(promptProject)
+    .then(portfolioData => console.log(portfolioData));
