@@ -176,7 +176,18 @@ const promptProject = (portfolioData) => {
       };
 
     const pageHTML = generatePage(mockData)
-        fs.writeFile('./index.html', pageHTML, err => {
-            if (err) throw err;
-            console.log('Portfolio Complete! Check out index.html to see the output!')
+        fs.writeFile('./dist/index.html', pageHTML, err => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            console.log('Portfolio Complete! Check out index.html to see the output!');
+            
+            fs.copyFile('./src/style.css', './dist/style.css', err => {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                console.log('Style sheet copied successfully!');
+            })
         });
